@@ -575,7 +575,7 @@
   #undef DISABLE_INACTIVE_EXTRUDER
 #endif
 
-// Průša MMU1, MMU 2.0, MMUS 2.0 and SMUFF force SINGLENOZZLE
+// Průša MMU1, MMU 2.0, MMUS 2.0 and SMuFF force SINGLENOZZLE
 #if HAS_MMU
   #define SINGLENOZZLE
 #endif
@@ -652,13 +652,6 @@
   #define E_INDEX_N(E) 0
   #define E_AXIS_N(E) E_AXIS
   #define UNUSED_E(E) UNUSED(E)
-#endif
-
-#if ENABLED(DWIN_CREALITY_LCD)
-  #define SERIAL_CATCHALL 0
-  #ifndef LCD_SERIAL_PORT
-    #define LCD_SERIAL_PORT 3 // Creality 4.x board
-  #endif
 #endif
 
 /**
@@ -924,7 +917,7 @@
   #define NORMAL_AXIS Z_AXIS
 #endif
 
-#if ENABLED(MORGAN_SCARA)
+#if EITHER(MORGAN_SCARA, AXEL_TPARA)
   #define IS_SCARA 1
   #define IS_KINEMATIC 1
 #elif ENABLED(DELTA)
@@ -950,11 +943,30 @@
   #define HAS_CLASSIC_E_JERK 1
 #endif
 
+//
+// Serial Port Info
+//
+#ifdef SERIAL_PORT_2
+  #define NUM_SERIAL 2
+  #define HAS_MULTI_SERIAL 1
+#elif defined(SERIAL_PORT)
+  #define NUM_SERIAL 1
+#else
+  #define NUM_SERIAL 0
+  #undef BAUD_RATE_GCODE
+#endif
 #if SERIAL_PORT == -1 || SERIAL_PORT_2 == -1
   #define HAS_USB_SERIAL 1
 #endif
 #if SERIAL_PORT_2 == -2
   #define HAS_ETHERNET 1
+#endif
+
+#if ENABLED(DWIN_CREALITY_LCD)
+  #define SERIAL_CATCHALL 0
+  #ifndef LCD_SERIAL_PORT
+    #define LCD_SERIAL_PORT 3 // Creality 4.x board
+  #endif
 #endif
 
 // Fallback Stepper Driver types that don't depend on Configuration_adv.h
